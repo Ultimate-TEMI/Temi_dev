@@ -1,0 +1,66 @@
+repositories:
+  temi_utils/BehaviorTree.ROS2:
+    type: git
+    url: git@github.com:Ultimate-TEMI/BehaviorTree.ROS2.git
+    version: working
+
+  temi_utils/BehaviorTree.CPP:
+    type: git
+    url: https://github.com/BehaviorTree/BehaviorTree.CPP.git
+    version: master
+
+  temi_utils/rws:
+    type: git
+    url: https://github.com/v-kiniv/rws.git
+    version: humble
+
+  temi_utils/websocketpp_ros2:
+    type: git
+    url: git@github.com:Ultimate-TEMI/websocketpp_ros2.git
+    version: main
+
+  temi_utils/teleop_twist_keyboard:
+    type: git
+    url: https://github.com/rohbotics/ros2_teleop_keyboard.git
+    version: master
+
+  temi_utils/rqt_reconfigure:
+    type: git
+    url: https://github.com/ros-visualization/rqt_reconfigure.git
+    version: humble
+
+  temi_utils/dynamic_subscriber_node:
+    type: git
+    url: https://github.com/SamerKhshiboun/dynamic_subscriber_node.git
+    version: main
+
+  person_detection_service:
+    type: git
+    url: git@github.com:Common-Behaviors/person_detection_service.git
+    version: temi
+    recursive: true
+
+  hardware_ctl:
+    type: git
+    url: git@github.com:Ultimate-TEMI/hardware_ctl.git
+    version: main
+
+  temi:
+    type: git
+    url: git@github.com:Ultimate-TEMI/temi.git
+    version: main
+
+  pdaf_tracker:
+    type: git
+    url: git@github.com:Common-Behaviors/pdaf_tracker.git
+    version: main
+
+  image_transport_plugins:
+    type: git
+    url: git@github.com:Common-Behaviors/image_transport_plugins.git
+    version: humble
+
+  realsense-ros:
+    type: git
+    url: git@github.com:Common-Behaviors/realsense-ros.git
+    version: custom
