@@ -1,2 +1,10 @@
-__pycache__
-.vscode
+# Ignore everything
+*
+
+# But not these files
+!run.sh
+!temi.repos
+
+# (Optional) Don’t ignore the .gitignore file itself
+!.gitignore
+
