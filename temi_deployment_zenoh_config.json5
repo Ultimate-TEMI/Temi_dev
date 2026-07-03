@@ -1,0 +1,323 @@
+{
+  mode: "router",
+
+  connect: {
+    endpoints: ["tls/129.70.142.138:7447"]
+  },
+
+  listen: {
+    endpoints: ["tcp/127.0.0.1:7447"]
+  },
+
+  scouting: {
+    multicast: {
+      enabled: false,
+      listen: false
+    },
+  },
+
+  transport: {
+    unicast: {
+      qos: {
+        enabled: true
+      },
+      compression: {
+        enabled: true
+      }
+    },
+
+    link: {
+      tls: {
+        root_ca_certificate: "/home/temi/rmw_configs/zenoh-certs/server-ca.pem",
+        enable_mtls: true,
+        connect_private_key: "/home/temi/rmw_configs/zenoh-certs/client1.key",
+        connect_certificate: "/home/temi/rmw_configs/zenoh-certs/client1.crt"
+      }
+    }
+  },
+
+  access_control: {
+    enabled: true,
+    default_permission: "deny",
+
+    rules: [
+      {
+        id: "local_tcp_allow_everything",
+        permission: "allow",
+        flows: ["ingress", "egress"],
+        messages: [
+          "put",
+          "delete",
+          "declare_subscriber",
+          "query",
+          "reply",
+          "declare_queryable",
+          "liveliness_token",
+          "liveliness_query",
+          "declare_liveliness_subscriber"
+        ],
+        key_exprs: [
+          "**",
+          "@/**",
+          "@ros2_lv/**"
+        ]
+      },
+
+      {
+        id: "remote_tls_allow_exposed_topic_data",
+        permission: "allow",
+        flows: ["ingress", "egress"],
+        messages: [
+          "put",
+          "delete",
+          "declare_subscriber"
+        ],
+        key_exprs: [
+          "*/tf/*/*",
+
+          "*/ranger/goal_pose/*/*",
+          "*/temi/goal_pose/*/*",
+
+          "*/ranger/global_costmap/costmap/*/*",
+          "*/ranger/odom/*/*",
+
+          "*/ranger/navigate_to_pose/_action/feedback/*/*",
+          "*/ranger/navigate_to_pose/_action/status/*/*",
+
+          "*/temi/navigate_to_pose/_action/feedback/*/*",
+          "*/temi/navigate_to_pose/_action/status/*/*"
+        ]
+      },
+
+      {
+        id: "remote_tls_allow_exposed_action_services",
+        permission: "allow",
+        flows: ["ingress", "egress"],
+        messages: [
+          "query",
+          "reply",
+          "declare_queryable"
+        ],
+        key_exprs: [
+          "*/ranger/navigate_to_pose/_action/send_goal/*/*",
+          "*/ranger/navigate_to_pose/_action/get_result/*/*",
+          "*/ranger/navigate_to_pose/_action/cancel_goal/*/*",
+
+          "*/temi/navigate_to_pose/_action/send_goal/*/*",
+          "*/temi/navigate_to_pose/_action/get_result/*/*",
+          "*/temi/navigate_to_pose/_action/cancel_goal/*/*"
+        ]
+      },
+
+      {
+        id: "remote_tls_allow_exposed_liveliness",
+        permission: "allow",
+        flows: ["ingress", "egress"],
+        messages: [
+          "liveliness_token",
+          "liveliness_query",
+          "declare_liveliness_subscriber"
+        ],
+        key_exprs: [
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%tf/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%tf/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%ranger%goal_pose/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%ranger%goal_pose/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%temi%goal_pose/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%temi%goal_pose/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%ranger%global_costmap%costmap/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%ranger%global_costmap%costmap/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%ranger%odom/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%ranger%odom/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%ranger%navigate_to_pose%_action%feedback/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%ranger%navigate_to_pose%_action%feedback/**",
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%ranger%navigate_to_pose%_action%status/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%ranger%navigate_to_pose%_action%status/**",
+
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%ranger%navigate_to_pose%_action%send_goal/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%ranger%navigate_to_pose%_action%send_goal/**",
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%ranger%navigate_to_pose%_action%get_result/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%ranger%navigate_to_pose%_action%get_result/**",
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%ranger%navigate_to_pose%_action%cancel_goal/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%ranger%navigate_to_pose%_action%cancel_goal/**",
+
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%temi%navigate_to_pose%_action%feedback/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%temi%navigate_to_pose%_action%feedback/**",
+          "@ros2_lv/*/*/*/*/MP/*/*/*/%temi%navigate_to_pose%_action%status/**",
+          "@ros2_lv/*/*/*/*/MS/*/*/*/%temi%navigate_to_pose%_action%status/**",
+
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%temi%navigate_to_pose%_action%send_goal/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%temi%navigate_to_pose%_action%send_goal/**",
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%temi%navigate_to_pose%_action%get_result/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%temi%navigate_to_pose%_action%get_result/**",
+          "@ros2_lv/*/*/*/*/SC/*/*/*/%temi%navigate_to_pose%_action%cancel_goal/**",
+          "@ros2_lv/*/*/*/*/SS/*/*/*/%temi%navigate_to_pose%_action%cancel_goal/**"
+        ]
+      },
+
+      {
+        id: "remote_tls_allow_peer_config",
+        permission: "allow",
+        flows: ["ingress", "egress"],
+        messages: [
+          "declare_subscriber",
+          "declare_queryable",
+          "query",
+          "reply"
+        ],
+        key_exprs: [
+          "@/**/peer/**",
+          "@/**/peer/config/**"
+        ]
+      }
+    ],
+
+    subjects: [
+      {
+        id: "local_tcp",
+        link_protocols: ["tcp"]
+      },
+
+      {
+        id: "remote_tls",
+        link_protocols: ["tls"]
+      }
+    ],
+
+    policies: [
+      {
+        id: "local_tcp_policy",
+        rules: [
+          "local_tcp_allow_everything"
+        ],
+        subjects: [
+          "local_tcp"
+        ]
+      },
+
+      {
+        id: "remote_tls_policy",
+        rules: [
+          "remote_tls_allow_exposed_topic_data",
+          "remote_tls_allow_exposed_action_services",
+          "remote_tls_allow_exposed_liveliness",
+          "remote_tls_allow_peer_config"
+        ],
+        subjects: [
+          "remote_tls"
+        ]
+      }
+    ]
+  },
+
+  qos: {
+    publication: [
+      {
+        key_exprs: ["*/tf/*/*"],
+        config: {
+          congestion_control: "drop",
+          priority: "real_time",
+          express: true,
+          reliability: "best_effort",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: ["*/ranger/goal_pose/*/*"],
+        config: {
+          congestion_control: "block",
+          priority: "interactive_high",
+          express: true,
+          reliability: "reliable",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: ["*/temi/goal_pose/*/*"],
+        config: {
+          congestion_control: "block",
+          priority: "interactive_high",
+          express: true,
+          reliability: "reliable",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: ["*/ranger/global_costmap/costmap/*/*"],
+        config: {
+          congestion_control: "drop",
+          priority: "data_low",
+          express: false,
+          reliability: "best_effort",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: ["*/ranger/odom/*/*"],
+        config: {
+          congestion_control: "drop",
+          priority: "real_time",
+          express: false,
+          reliability: "best_effort",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: [
+          "*/ranger/navigate_to_pose/_action/feedback/*/*",
+          "*/temi/navigate_to_pose/_action/feedback/*/*"
+        ],
+        config: {
+          congestion_control: "block",
+          priority: "interactive_high",
+          express: true,
+          reliability: "reliable",
+          allowed_destination: "remote"
+        }
+      },
+
+      {
+        key_exprs: [
+          "*/ranger/navigate_to_pose/_action/status/*/*",
+          "*/temi/navigate_to_pose/_action/status/*/*"
+        ],
+        config: {
+          congestion_control: "block",
+          priority: "interactive_high",
+          express: true,
+          reliability: "reliable",
+          allowed_destination: "remote"
+        }
+      }
+    ]
+  },
+
+  downsampling: [
+    {
+      id: "remote_tf_downsample",
+
+      link_protocols: ["tls"],
+
+      flows: ["egress"],
+
+      messages: ["put"],
+
+      rules: [
+        {
+          key_expr: "*/tf/*/*",
+          freq: 5.0
+        }
+      ]
+    }
+  ]
+}

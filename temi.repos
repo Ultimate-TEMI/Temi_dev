@@ -40,11 +40,6 @@ repositories:
     version: temi
     recursive: true
 
-  hardware_ctl:
-    type: git
-    url: git@github.com:Ultimate-TEMI/hardware_ctl.git
-    version: main
-
   temi:
     type: git
     url: git@github.com:Ultimate-TEMI/temi.git
@@ -63,4 +58,24 @@ repositories:
   realsense-ros:
     type: git
     url: git@github.com:Common-Behaviors/realsense-ros.git
-    version: custom
+    version: temi
+
+  robot_placement_pkgs:
+    type: git
+    url: git@github.com:Ultimate-TEMI/robot_placement_pkgs.git
+    version: main
+
+  tf_aggregator:
+    type: git
+    url: git@github.com:Common-Behaviors/tf_aggregator.git
+    version: temi
+
+  detections_utils_pkg:
+    type: git
+    url: git@github.com:Ultimate-TEMI/detections_utils_pkg.git
+    version: main
+
+  vizanti:
+    type: git
+    url: https://github.com/Ultimate-Base-Station/vizanti
+    version: temi

@@ -1,0 +1,76 @@
+{
+  mode: "router",
+
+  connect: {
+    endpoints: ["tls/129.70.142.138:7447"]
+  },
+
+  listen: {
+    endpoints: ["tcp/0.0.0.0:7447"]
+  },
+
+  scouting: {
+    multicast: {
+      enabled: false,
+      listen: false
+    }
+  },
+
+  transport: {
+    unicast: {
+      compression: {
+        enabled: true
+      }
+    },
+
+    link: {
+      tls: {
+        root_ca_certificate: "/home/temi/rmw_configs/zenoh-certs/server-ca.pem",
+        enable_mtls: true,
+        connect_private_key: "/home/temi/rmw_configs/zenoh-certs/client1.key",
+        connect_certificate: "/home/temi/rmw_configs/zenoh-certs/client1.crt"
+      }
+    }
+  },
+
+  qos: {
+    publication: [
+      {
+        // Dynamic TF: prefer fresh transforms, drop old/delayed ones
+        key_exprs: ["*/tf/*/*"],
+        config: {
+          congestion_control: "drop",
+          priority: "real_time",
+          express: true,
+          reliability: "best_effort",
+          allowed_destination: "remote"
+        }
+      },
+      {
+        // Static TF: must arrive reliably
+        key_exprs: ["*/tf_static/*/*"],
+        config: {
+          congestion_control: "block",
+          priority: "real_time",
+          express: true,
+          reliability: "reliable",
+          allowed_destination: "remote"
+        }
+      }
+    ]
+  },
+
+  // Optional downsampling example:
+  
+   downsampling: [
+     {
+       id: "temi_downsample",
+       link_protocols: ["tls"],
+       flows: ["egress"],
+       messages: ["push", "query", "reply"],
+       rules: [
+         { key_expr: "*/tf/*/*", freq: 5.0 }
+       ]
+     }
+   ]
+}

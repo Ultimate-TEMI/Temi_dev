@@ -3,7 +3,11 @@
 
 # But not these files
 !run.sh
+!run_alignment.sh
+!setup.sh
 !temi.repos
+!temi_deployment_zenoh_config.json5
+!temi_mapping_zenoh_config.json5
 
 # (Optional) Don’t ignore the .gitignore file itself
 !.gitignore
